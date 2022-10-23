@@ -6,49 +6,48 @@ import { toast } from 'react-toastify';
 import { fetchImages } from 'api';
 import { PropTypes } from 'prop-types';
 import { Loader } from './Loader';
+import { nanoid } from 'nanoid'
 
 export default function ImageGallery({ input }) {
   const [page, setPage] = useState(1);
   const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState('');
 
   useEffect(() => {
     if (input === '') {
       return;
     }
-    setLoading(true);
-    // console.log(loading, 'true');
+    setLoading('true');
     fetchImages(input, page)
       .then(response => {
         if (response.length > 0) {
+          if( page === 1) {
+            setImages([])
+            setImages([...response])
+          }
           page > 1
             ? setImages(prev => [...prev, ...response])
             : setImages([...response]);
         } else {
           toast.error('Wrong request');
         }
+        setLoading('');
       })
       .catch(error => {
         console.log(error);
       });
-    setLoading(false);
-    // console.log(loading, 'false');
   }, [input, page]);
 
   const loadMore = () => {
     setPage(page => page + 1);
   };
 
-  // const onLoadingChange = () => {
-  //   setLoading(loading => !loading)
-  // };
-
   return (
     <>
       {loading && <Loader />}
       <Gallery>
         {images.map(image => (
-          <Image key={image.id}>
+          <Image key={nanoid()}>
             <ImageGalleryItem image={image} />
           </Image>
         ))}

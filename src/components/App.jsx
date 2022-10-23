@@ -18,8 +18,6 @@ export default function App() {
       
       <ImageGallery
         input={input}
-        // loading={loading}
-        // onLoadingChange={onChange}
       />
       <ToastContainer autoClose={3000} />
     </AppSection>
