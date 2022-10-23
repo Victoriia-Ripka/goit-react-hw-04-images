@@ -4,17 +4,17 @@ import { useEffect } from 'react';
 
 export const Modal = ({ imageURL, onClose }) => {
   useEffect(() => {
+    const handleClick = e => {
+      if (e.code === 'Escape') {
+        onClose();
+      }
+    };
+
     window.addEventListener('keydown', handleClick);
     return () => {
       window.removeEventListener('keydown', handleClick);
     };
-  }, []);
-
-  const handleClick = e => {
-    if (e.code === 'Escape') {
-      onClose();
-    }
-  };
+  }, [onClose]);
 
   const closeModal = e => {
     if (e.target.nodeName === 'DIV') onClose();

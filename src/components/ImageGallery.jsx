@@ -5,16 +5,18 @@ import { Gallery, Image, ButtonWrapper } from './styles.styled';
 import { toast } from 'react-toastify';
 import { fetchImages } from 'api';
 import { PropTypes } from 'prop-types';
-// loading,
-export default function ImageGallery({ input, onLoadingChange }) {
+import { Loader } from './Loader';
+
+export default function ImageGallery({ input }) {
   const [page, setPage] = useState(1);
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     if (input === '') {
       return;
     }
-    onLoadingChange();
+    setLoading(true);
     // console.log(loading, 'true');
     fetchImages(input, page)
       .then(response => {
@@ -29,7 +31,7 @@ export default function ImageGallery({ input, onLoadingChange }) {
       .catch(error => {
         console.log(error);
       });
-    onLoadingChange();
+      setLoading(false);
     // console.log(loading, 'false');
   }, [input, page]);
 
@@ -37,8 +39,13 @@ export default function ImageGallery({ input, onLoadingChange }) {
     setPage(page => page + 1);
   };
 
+  // const onLoadingChange = () => {
+  //   setLoading(loading => !loading)
+  // };
+
   return (
     <>
+      {loading && <Loader />}
       <Gallery>
         {images.map(image => (
           <Image key={image.id}>
@@ -56,6 +63,4 @@ export default function ImageGallery({ input, onLoadingChange }) {
 
 ImageGallery.propTypes = {
   input: PropTypes.string.isRequired,
-  // loading: PropTypes.bool.isRequired,
-  onLoadingChange: PropTypes.func.isRequired,
 };
