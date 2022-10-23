@@ -10,7 +10,7 @@ import { Loader } from './Loader';
 export default function ImageGallery({ input }) {
   const [page, setPage] = useState(1);
   const [images, setImages] = useState([]);
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (input === '') {
@@ -22,7 +22,7 @@ export default function ImageGallery({ input }) {
       .then(response => {
         if (response.length > 0) {
           page > 1
-            ? setImages([...images, ...response])
+            ? setImages(prev => [...prev, ...response])
             : setImages([...response]);
         } else {
           toast.error('Wrong request');
@@ -31,7 +31,7 @@ export default function ImageGallery({ input }) {
       .catch(error => {
         console.log(error);
       });
-      setLoading(false);
+    setLoading(false);
     // console.log(loading, 'false');
   }, [input, page]);
 
