@@ -1,35 +1,31 @@
 import { Backdrop, ImgModal } from './styles.styled';
 import { PropTypes } from 'prop-types';
-import { Component } from 'react';
+import { useEffect } from 'react';
 
-export class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleClick)
-  }
+export const Modal = ({ imageURL, onClose }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', handleClick);
+    return () => {
+      window.removeEventListener('keydown', handleClick);
+    };
+  }, []);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleClick);
-  }
-
-  handleClick = e => {
-    console.log(e.code)
-    if(e.code=== 'Escape') {
-      this.props.onClose()
+  const handleClick = e => {
+    if (e.code === 'Escape') {
+      onClose();
     }
-  }
-  
-  closeModal = e => {
-    if(e.target.nodeName === 'DIV') this.props.onClose();
   };
 
-  render() {
-    return (
-      <Backdrop onClick={this.closeModal}>
-        <ImgModal src={this.props.imageURL} alt="hello" />
-      </Backdrop>
-    );
-  }
-}
+  const closeModal = e => {
+    if (e.target.nodeName === 'DIV') onClose();
+  };
+
+  return (
+    <Backdrop onClick={closeModal}>
+      <ImgModal src={imageURL} alt="hello" />
+    </Backdrop>
+  );
+};
 
 Modal.propTypes = {
   imageURL: PropTypes.string.isRequired,

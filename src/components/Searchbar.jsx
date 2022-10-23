@@ -1,56 +1,43 @@
-import { Component } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
-import { ReactComponent as SearchIcon} from '../images/svg/icons8-search.svg' 
-// http 16:50
-import {
-  Header,
-  Input,
-  Form,
-  SearchFormBtn,
-  // SearchFormBtnLabel,
-} from './styles.styled';
+import { ReactComponent as SearchIcon } from '../images/svg/icons8-search.svg';
+import { Header, Input, Form, SearchFormBtn } from './styles.styled';
 import { PropTypes } from 'prop-types';
 
-export default class Searchbar extends Component {
-  state = {
-    search: '',
+export const Searchbar = ({ onSubmit }) => {
+  const [search, setSearch] = useState('');
+
+  const handleInput = e => {
+    setSearch(e.currentTarget.value.toLowerCase().trim());
   };
 
-  handleInput = e => {
-    this.setState({ search: e.currentTarget.value.toLowerCase().trim() });
-  };
-
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
-    if (this.state.search === '') {
+    if (search === '') {
       toast.error('input a word');
       return;
     }
-    this.props.onSubmit(this.state.search);
-    // this.setState({ search: '' });
+    onSubmit(search);
   };
 
-  render() {
-    return (
-      <Header>
-        <Form onSubmit={this.handleSubmit}>
-          <SearchFormBtn type="submit">
-            <SearchIcon/>
-            {/* <SearchFormBtnLabel>Search</SearchFormBtnLabel> */}
-          </SearchFormBtn>
-          <Input
-            type="text"
-            // autoComplete="off"
-            autoFocus
-            value={this.state.search}
-            onChange={this.handleInput}
-            placeholder="Search images and photos"
-          />
-        </Form>
-      </Header>
-    );
-  }
-}
+  return (
+    <Header>
+      <Form onSubmit={handleSubmit}>
+        <SearchFormBtn type="submit">
+          <SearchIcon />
+        </SearchFormBtn>
+        <Input
+          type="text"
+          autoComplete="off"
+          autoFocus
+          value={search}
+          onChange={handleInput}
+          placeholder="Search images and photos"
+        />
+      </Form>
+    </Header>
+  );
+};
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,

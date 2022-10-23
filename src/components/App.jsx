@@ -1,46 +1,37 @@
-import { Component } from 'react';
-import Searchbar from './Searchbar';
+import { useState } from 'react';
+// import { useToggle } from 'react-use';
+import { Searchbar } from './Searchbar';
 import ImageGallery from './ImageGallery';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AppSection } from './styles.styled';
 import { Loader } from './Loader';
 
-export class App extends Component {
-  state = {
-    input: '',
-    loading: false,
+export default function App() {
+  const [input, setInput] = useState('');
+  const [ loading, setLoading] = useState(false)
+  // const [on, toggle] = useToggle(false);
+
+  const handleSubmit = e => {
+    setInput(e);
   };
 
-  // componentDidMount() {
-  //   const input = localStorage.getItem('input')
-  //   if (input) {
-  //     this.setState({ input: input });
-  //   }
-  // }
-
-  handleSubmit = e => {
-    this.setState({ input: e });
-    // localStorage.setItem("input", e)
+  const onChange = () => {
+    // toggle(!on);
+    setLoading(loading => !loading)
   };
 
-  onChange = () => {
-    this.setState({ loading: !this.state.loading });
-  };
-
-  render() {
-    const { loading } = this.state;
-    return (
-      <AppSection>
-        <Searchbar onSubmit={this.handleSubmit} />
-        {loading && <Loader />}
-        <ImageGallery
-          input={this.state.input}
-          loading={this.state.loading}
-          onLoadingChange={this.onChange}
-        />
-        <ToastContainer autoClose={3000} />
-      </AppSection>
-    );
-  }
+  return (
+    <AppSection>
+      <Searchbar onSubmit={handleSubmit} />
+      {/* {on && <Loader />} */}
+      {loading && <Loader />}
+      <ImageGallery
+        input={input}
+        // loading={loading}
+        onLoadingChange={onChange}
+      />
+      <ToastContainer autoClose={3000} />
+    </AppSection>
+  );
 }

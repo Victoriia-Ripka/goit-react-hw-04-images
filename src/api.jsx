@@ -8,7 +8,7 @@ export const fetchImages = async (input, page) => {
     const r = await axios.get(
       `/?q=${input}&page=${page}&key=${process.env.REACT_APP_API_KEY}&image_type=photo&orientation=horizontal&per_page=12`
     );
-    const arrayOfImages = r.data.hits
+    const arrayOfImages = await r.data.hits
     return arrayOfImages;
   } catch (error) {
     toast.error('not more such result');
